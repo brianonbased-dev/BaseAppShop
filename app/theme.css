@@ -1,0 +1,446 @@
+/* Ensure smooth scrolling and proper backdrop behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Backdrop blur support */
+.backdrop-blur-md {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Sticky header enhancements */
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  /* Ensure it works on iOS Safari */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Ensure proper layering for modals and dropdowns */
+.wallet-dropdown {
+  z-index: 100 !important;
+}
+
+/* Remove old cart modal styles that might conflict */
+
+/* Force cart modal to center properly */
+.cart-modal-container {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 99999 !important;
+  padding: 1rem !important;
+}
+
+.cart-modal-content {
+  position: relative !important;
+  margin: 0 !important;
+  transform: none !important;
+  top: auto !important;
+  left: auto !important;
+  width: 100% !important;
+  max-width: 28rem !important;
+  max-height: 80vh !important;
+}
+
+/* Override any problematic CSS with simple, readable styles */
+html, body {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.mini-app-theme {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.mini-app-theme * {
+  color: #000000 !important;
+}
+
+/* Ensure all text is visible */
+* {
+  color: #000000 !important;
+}
+
+/* Card backgrounds - clean white */
+[class*="bg-"] {
+  background-color: #ffffff !important;
+  border: 1px solid rgba(16, 185, 129, 0.2) !important;
+}
+
+/* Brian's Store Font - Assistant */
+@font-face {
+  font-family: Assistant;
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("//shop.brianxbase.com/cdn/fonts/assistant/assistant_n4.9120912a469cad1cc292572851508ca49d12e768.woff2") format("woff2"),
+       url("//shop.brianxbase.com/cdn/fonts/assistant/assistant_n4.6e9875ce64e0fefcd3f4446b7ec9036b3ddd2985.woff") format("woff");
+}
+
+@font-face {
+  font-family: Assistant;
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("//shop.brianxbase.com/cdn/fonts/assistant/assistant_n7.bf44452348ec8b8efa3aa3068825305886b1c83c.woff2") format("woff2"),
+       url("//shop.brianxbase.com/cdn/fonts/assistant/assistant_n7.0c887fee83f6b3bda822f1150b912c72da0f7b64.woff") format("woff");
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Brian's Store Color Schemes */
+:root,
+.color-scheme-1 {
+  /* Enhanced white scheme with Brian's Linktree green */
+  --color-background: 255,255,255;
+  --gradient-background: linear-gradient(135deg, #ffffff 0%, #f9fafb 50%, #ecfdf5 100%);
+  --color-foreground: 6,78,59;
+  --color-background-contrast: 167,243,208;
+  --color-shadow: 18,18,18;
+  --color-button: 16,185,129;
+  --color-button-text: 255,255,255;
+  --color-secondary-button: 236,253,245;
+  --color-secondary-button-text: 16,185,129;
+  --color-link: 16,185,129;
+  --color-badge-foreground: 6,78,59;
+  --color-badge-background: 167,243,208;
+  --color-badge-border: 16,185,129;
+  
+  /* App variables mapped to Brian's colors */
+  --app-background: rgb(var(--color-background));
+  --app-foreground: rgb(var(--color-foreground));
+  --app-foreground-muted: rgba(var(--color-foreground), 0.75);
+  --app-accent: rgb(var(--color-button));
+  --app-accent-hover: rgba(var(--color-button), 0.9);
+  --app-accent-active: rgba(var(--color-button), 0.8);
+  --app-accent-light: rgba(var(--color-button), 0.1);
+  --app-gray: rgba(255,255,255, 0.8);
+  --app-gray-dark: rgba(255,255,255, 0.9);
+  --app-card-bg: rgba(255,255,255, 0.95);
+  --app-card-border: rgba(var(--color-foreground), 0.15);
+}
+
+.color-scheme-2 {
+  /* Light gray scheme */
+  --color-background: 243,243,243;
+  --gradient-background: #f3f3f3;
+  --color-foreground: 18,18,18;
+  --color-background-contrast: 179,179,179;
+  --color-shadow: 18,18,18;
+  --color-button: 18,18,18;
+  --color-button-text: 243,243,243;
+  --color-secondary-button: 243,243,243;
+  --color-secondary-button-text: 18,18,18;
+  --color-link: 18,18,18;
+  --color-badge-foreground: 18,18,18;
+  --color-badge-background: 243,243,243;
+  --color-badge-border: 18,18,18;
+}
+
+.color-scheme-3 {
+  /* Dark blue-gray scheme */
+  --color-background: 36,40,51;
+  --gradient-background: #242833;
+  --color-foreground: 255,255,255;
+  --color-background-contrast: 47,52,66;
+  --color-shadow: 18,18,18;
+  --color-button: 255,255,255;
+  --color-button-text: 0,0,0;
+  --color-secondary-button: 36,40,51;
+  --color-secondary-button-text: 255,255,255;
+  --color-link: 255,255,255;
+  --color-badge-foreground: 255,255,255;
+  --color-badge-background: 36,40,51;
+  --color-badge-border: 255,255,255;
+}
+
+.color-scheme-4 {
+  /* Dark scheme */
+  --color-background: 18,18,18;
+  --gradient-background: #121212;
+  --color-foreground: 255,255,255;
+  --color-background-contrast: 146,146,146;
+  --color-shadow: 18,18,18;
+  --color-button: 255,255,255;
+  --color-button-text: 18,18,18;
+  --color-secondary-button: 18,18,18;
+  --color-secondary-button-text: 255,255,255;
+  --color-link: 255,255,255;
+  --color-badge-foreground: 255,255,255;
+  --color-badge-background: 18,18,18;
+  --color-badge-border: 255,255,255;
+}
+
+.color-scheme-5 {
+  /* Blue scheme */
+  --color-background: 51,79,180;
+  --gradient-background: #334fb4;
+  --color-foreground: 255,255,255;
+  --color-background-contrast: 23,35,81;
+  --color-shadow: 18,18,18;
+  --color-button: 255,255,255;
+  --color-button-text: 51,79,180;
+  --color-secondary-button: 51,79,180;
+  --color-secondary-button-text: 255,255,255;
+  --color-link: 255,255,255;
+  --color-badge-foreground: 255,255,255;
+  --color-badge-background: 51,79,180;
+  --color-badge-border: 255,255,255;
+}
+
+.color-scheme-6 {
+  /* Fresh Green scheme */
+  --color-background: 236,253,245;
+  --gradient-background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 50%, #a7f3d0 100%);
+  --color-foreground: 6,78,59;
+  --color-background-contrast: 16,185,129;
+  --color-shadow: 18,18,18;
+  --color-button: 16,185,129;
+  --color-button-text: 255,255,255;
+  --color-secondary-button: 236,253,245;
+  --color-secondary-button-text: 16,185,129;
+  --color-link: 16,185,129;
+  --color-badge-foreground: 255,255,255;
+  --color-badge-background: 16,185,129;
+  --color-badge-border: 16,185,129;
+}
+
+.color-scheme-7 {
+  /* Vibrant Base Green */
+  --color-background: 255,255,255;
+  --gradient-background: linear-gradient(135deg, #ffffff 0%, #ecfdf5 30%, #d1fae5 70%, #a7f3d0 100%);
+  --color-foreground: 6,78,59;
+  --color-background-contrast: 167,243,208;
+  --color-shadow: 18,18,18;
+  --color-button: 16,185,129;
+  --color-button-text: 255,255,255;
+  --color-secondary-button: 167,243,208;
+  --color-secondary-button-text: 6,78,59;
+  --color-link: 16,185,129;
+  --color-badge-foreground: 6,78,59;
+  --color-badge-background: 167,243,208;
+  --color-badge-border: 16,185,129;
+}
+
+/* Brian's Design System Variables */
+:root {
+  --font-body-family: Assistant, sans-serif;
+  --font-body-style: normal;
+  --font-body-weight: 400;
+  --font-body-weight-bold: 700;
+  --font-heading-family: Assistant, sans-serif;
+  --font-heading-style: normal;
+  --font-heading-weight: 400;
+  --font-body-scale: 1.0;
+  --font-heading-scale: 1.0;
+  
+  /* Product card styling - minimal like Brian's store */
+  --product-card-corner-radius: 0px;
+  --product-card-text-alignment: center;
+  --product-card-border-width: 0px;
+  --product-card-border-opacity: 0.1;
+  --product-card-shadow-opacity: 0.0;
+  
+  /* Button styling - minimal/clean */
+  --buttons-radius: 0px;
+  --buttons-border-width: 1px;
+  --buttons-border-opacity: 1.0;
+  --buttons-shadow-opacity: 0.0;
+  
+  /* Input styling */
+  --inputs-radius: 0px;
+  --inputs-border-width: 1px;
+  --inputs-border-opacity: 0.55;
+}
+
+.mini-app-theme {
+  --ock-font-family: var(--font-body-family);
+  --ock-border-radius: 0px; /* Match Brian's minimal design */
+  --ock-border-radius-inner: 0px;
+
+  /* Text colors mapped to Brian's system */
+  --ock-text-inverse: var(--app-background);
+  --ock-text-foreground: var(--app-foreground);
+  --ock-text-foreground-muted: var(--app-foreground-muted);
+  --ock-text-error: #ef4444;
+  --ock-text-primary: var(--app-accent);
+  --ock-text-success: #22c55e;
+  --ock-text-warning: #f59e0b;
+  --ock-text-disabled: rgba(var(--color-foreground), 0.5);
+
+  /* Background colors mapped to Brian's system */
+  --ock-bg-default: var(--app-background);
+  --ock-bg-default-hover: var(--app-gray);
+  --ock-bg-default-active: var(--app-gray-dark);
+  --ock-bg-alternate: var(--app-gray);
+  --ock-bg-alternate-hover: var(--app-gray-dark);
+  --ock-bg-alternate-active: var(--app-gray-dark);
+  --ock-bg-inverse: var(--app-foreground);
+  --ock-bg-inverse-hover: rgba(var(--color-foreground), 0.9);
+  --ock-bg-inverse-active: rgba(var(--color-foreground), 0.8);
+  --ock-bg-primary: var(--app-accent);
+  --ock-bg-primary-hover: var(--app-accent-hover);
+  --ock-bg-primary-active: var(--app-accent-active);
+  --ock-bg-primary-washed: var(--app-accent-light);
+  --ock-bg-primary-disabled: rgba(var(--color-button), 0.5);
+  --ock-bg-secondary: rgb(var(--color-secondary-button));
+  --ock-bg-secondary-hover: rgba(var(--color-secondary-button), 0.9);
+  --ock-bg-secondary-active: rgba(var(--color-secondary-button), 0.8);
+  --ock-bg-error: #fee2e2;
+  --ock-bg-warning: #fef3c7;
+  --ock-bg-success: #dcfce7;
+  --ock-bg-default-reverse: var(--app-foreground);
+
+  /* Icon colors */
+  --ock-icon-color-primary: var(--app-accent);
+  --ock-icon-color-foreground: var(--app-foreground);
+  --ock-icon-color-foreground-muted: var(--app-foreground-muted);
+  --ock-icon-color-inverse: var(--app-background);
+  --ock-icon-color-error: #ef4444;
+  --ock-icon-color-success: #22c55e;
+  --ock-icon-color-warning: #f59e0b;
+
+  /* Line colors */
+  --ock-line-primary: var(--app-accent);
+  --ock-line-default: var(--app-gray-dark);
+  --ock-line-heavy: rgba(var(--color-foreground), 0.3);
+  --ock-line-inverse: rgba(var(--color-background), 0.3);
+}
+
+* {
+  touch-action: manipulation;
+}
+
+body {
+  color: rgba(var(--color-foreground), 0.75);
+  background-color: rgb(var(--color-background));
+  font-family: var(--font-body-family);
+  font-style: var(--font-body-style);
+  font-weight: var(--font-body-weight);
+  font-size: 1.5rem;
+  letter-spacing: 0.06rem;
+  line-height: calc(1 + 0.8 / var(--font-body-scale));
+  margin: 0;
+}
+
+@media screen and (min-width: 750px) {
+  body {
+    font-size: 1.6rem;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-fade-out {
+  animation: fadeOut 3s forwards;
+}
+
+.animate-slide-in {
+  animation: slideInUp 0.8s ease-out forwards;
+}
+
+.animate-slide-in-modal {
+  animation: slideInModal 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.scroll-trigger {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease-out;
+}
+
+.scroll-trigger.animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.banner__content {
+  position: relative;
+  overflow: hidden;
+}
+
+.banner__box.gradient {
+  background: var(--gradient-background);
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInModal {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

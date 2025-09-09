@@ -1,0 +1,333 @@
+import { createStorefrontApiClient } from '@shopify/storefront-api-client';
+
+// Read from environment variables
+const SHOPIFY_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN;
+const SHOPIFY_TOKEN = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN;
+
+// Validate required environment variables
+if (!SHOPIFY_DOMAIN) {
+  throw new Error('NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN environment variable is required');
+}
+
+if (!SHOPIFY_TOKEN) {
+  throw new Error('NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN environment variable is required');
+}
+
+console.log('🔧 Using direct Shopify values:', {
+  domain: SHOPIFY_DOMAIN,
+  tokenLength: SHOPIFY_TOKEN.length,
+  tokenPrefix: SHOPIFY_TOKEN.substring(0, 8)
+});
+
+// Simple direct client
+export const storefrontClient = createStorefrontApiClient({
+  storeDomain: `https://${SHOPIFY_DOMAIN}`,
+  accessToken: SHOPIFY_TOKEN,
+  apiVersion: '2024-10',
+});
+
+console.log('✅ Direct Shopify client created successfully!');
+
+// Common GraphQL queries
+export const PRODUCT_QUERY = `
+  query getProducts($first: Int!, $after: String) {
+    products(first: $first, after: $after) {
+      edges {
+        node {
+          id
+          handle
+          title
+          description
+          priceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+            maxVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+          images(first: 5) {
+            edges {
+              node {
+                id
+                url
+                altText
+                width
+                height
+              }
+            }
+          }
+          variants(first: 10) {
+            edges {
+              node {
+                id
+                title
+                price {
+                  amount
+                  currencyCode
+                }
+                availableForSale
+                quantityAvailable
+              }
+            }
+          }
+          tags
+          vendor
+          productType
+        }
+        cursor
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+  }
+`;
+
+export const SINGLE_PRODUCT_QUERY = `
+  query getProduct($handle: String!) {
+    product(handle: $handle) {
+      id
+      title
+      description
+      handle
+      priceRange {
+        minVariantPrice {
+          amount
+          currencyCode
+        }
+        maxVariantPrice {
+          amount
+          currencyCode
+        }
+      }
+      images(first: 10) {
+        edges {
+          node {
+            id
+            url
+            altText
+            width
+            height
+          }
+        }
+      }
+      variants(first: 50) {
+        edges {
+          node {
+            id
+            title
+            price {
+              amount
+              currencyCode
+            }
+            availableForSale
+            quantityAvailable
+            selectedOptions {
+              name
+              value
+            }
+          }
+        }
+      }
+      options {
+        id
+        name
+        values
+      }
+      tags
+      vendor
+      productType
+      seo {
+        title
+        description
+      }
+    }
+  }
+`;
+
+export const CART_CREATE_MUTATION = `
+  mutation cartCreate($input: CartInput!) {
+    cartCreate(input: $input) {
+      cart {
+        id
+        checkoutUrl
+        totalQuantity
+        lines(first: 100) {
+          edges {
+            node {
+              id
+              quantity
+              merchandise {
+                ... on ProductVariant {
+                  id
+                  title
+                  price {
+                    amount
+                    currencyCode
+                  }
+                  product {
+                    title
+                    handle
+                  }
+                }
+              }
+            }
+          }
+        }
+        cost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+          subtotalAmount {
+            amount
+            currencyCode
+          }
+          totalTaxAmount {
+            amount
+            currencyCode
+          }
+        }
+      }
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const CART_LINES_ADD_MUTATION = `
+  mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
+    cartLinesAdd(cartId: $cartId, lines: $lines) {
+      cart {
+        id
+        totalQuantity
+        lines(first: 100) {
+          edges {
+            node {
+              id
+              quantity
+              merchandise {
+                ... on ProductVariant {
+                  id
+                  title
+                  price {
+                    amount
+                    currencyCode
+                  }
+                  product {
+                    title
+                    handle
+                  }
+                }
+              }
+            }
+          }
+        }
+        cost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+        }
+      }
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+// Types for TypeScript
+export interface ShopifyProduct {
+  id: string;
+  handle: string;
+  title: string;
+  description: string;
+  priceRange: {
+    minVariantPrice: {
+      amount: string;
+      currencyCode: string;
+    };
+    maxVariantPrice: {
+      amount: string;
+      currencyCode: string;
+    };
+  };
+  images: {
+    edges: Array<{
+      node: {
+        id: string;
+        url: string;
+        altText: string | null;
+        width: number;
+        height: number;
+      };
+    }>;
+  };
+  variants: {
+    edges: Array<{
+      node: {
+        id: string;
+        title: string;
+        price: {
+          amount: string;
+          currencyCode: string;
+        };
+        availableForSale: boolean;
+        quantityAvailable: number;
+      };
+    }>;
+  };
+  tags: string[];
+  vendor: string;
+  productType: string;
+}
+
+export interface CartLine {
+  id: string;
+  quantity: number;
+  merchandise: {
+    id: string;
+    title: string;
+    price: {
+      amount: string;
+      currencyCode: string;
+    };
+    product: {
+      title: string;
+      handle: string;
+    };
+  };
+}
+
+export interface ShopifyCart {
+  id: string;
+  checkoutUrl: string;
+  totalQuantity: number;
+  lines: {
+    edges: Array<{
+      node: CartLine;
+    }>;
+  };
+  cost: {
+    totalAmount: {
+      amount: string;
+      currencyCode: string;
+    };
+    subtotalAmount: {
+      amount: string;
+      currencyCode: string;
+    };
+    totalTaxAmount: {
+      amount: string;
+      currencyCode: string;
+    };
+  };
+}
