@@ -1,9 +1,22 @@
-'use server';
-
 import { NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import crypto from 'crypto';
-import type { ShopifyOrder } from '@/lib/actions/cart';
+
+// Simple webhook order data interface
+interface OrderWebhook {
+  id: number;
+  order_number: string;
+  email: string;
+  total_price: string;
+  currency: string;
+  fulfillment_status?: string | null;
+  cancel_reason?: string | null;
+  line_items?: Array<{
+    id: number;
+    title: string;
+    quantity: number;
+  }>;
+}
 
 // Helper function to verify Shopify webhook signature
 function verifyShopifyWebhook(body: string, signature: string, secret: string): boolean {
@@ -91,7 +104,7 @@ export async function POST(request: NextRequest) {
 }
 
 // Handle order paid webhook
-async function handleOrderPaid(order: ShopifyOrder) {
+async function handleOrderPaid(order: OrderWebhook) {
   console.log('💰 Order paid:', {
     id: order.id,
     number: order.order_number,
@@ -102,16 +115,10 @@ async function handleOrderPaid(order: ShopifyOrder) {
 
   // TODO: Add notification logic here
   // You could send notifications to users, update database, etc.
-  
-  // Example: If you have user notification system
-  // await sendPurchaseNotification(order);
-  
-  // Example: Update internal database
-  // await updateOrderStatus(order.id, 'paid');
 }
 
 // Handle order fulfilled webhook  
-async function handleOrderFulfilled(order: ShopifyOrder) {
+async function handleOrderFulfilled(order: OrderWebhook) {
   console.log('📦 Order fulfilled:', {
     id: order.id,
     number: order.order_number,
@@ -120,11 +127,10 @@ async function handleOrderFulfilled(order: ShopifyOrder) {
   });
 
   // TODO: Send shipping notifications
-  // await sendShippingNotification(order);
 }
 
 // Handle order cancelled webhook
-async function handleOrderCancelled(order: ShopifyOrder) {
+async function handleOrderCancelled(order: OrderWebhook) {
   console.log('❌ Order cancelled:', {
     id: order.id,
     number: order.order_number,
@@ -133,11 +139,10 @@ async function handleOrderCancelled(order: ShopifyOrder) {
   });
 
   // TODO: Handle refunds, inventory updates
-  // await processRefund(order);
 }
 
 // Handle order created webhook
-async function handleOrderCreated(order: ShopifyOrder) {
+async function handleOrderCreated(order: OrderWebhook) {
   console.log('🆕 Order created:', {
     id: order.id,
     number: order.order_number,
@@ -148,5 +153,4 @@ async function handleOrderCreated(order: ShopifyOrder) {
   });
 
   // TODO: Send order confirmation
-  // await sendOrderConfirmation(order);
 }

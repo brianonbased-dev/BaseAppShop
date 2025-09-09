@@ -19,7 +19,6 @@
     "viem": "^2.27.2",
     "wagmi": "^2.16.0",
     "@shopify/storefront-api-client": "^1.0.1",
-    "@shopify/admin-api-client": "^1.0.1",
     "lucide-react": "^0.263.1"
   },
   "devDependencies": {

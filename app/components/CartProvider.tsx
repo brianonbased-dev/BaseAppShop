@@ -270,9 +270,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
         const result = await initiateCheckout(checkoutItems);
         
         if (result.success && result.checkoutUrl) {
+          // Calculate total before clearing cart
+          const total = cartItems.reduce((sum, item) => sum + (parseFloat(item.price) * item.quantity), 0);
+          
+          // Clear the cart immediately after successful checkout
+          await handleClearCart();
+          
           openUrl(result.checkoutUrl);
           
-          const total = cartItems.reduce((sum, item) => sum + (parseFloat(item.price) * item.quantity), 0);
           setPurchaseDetails({ total });
           setShowConfirmation(true);
           setTimeout(() => setShowConfirmation(false), 5000);
@@ -288,8 +293,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
         const result = await initiateCheckout(checkoutItems);
         
         if (result.success && result.checkoutUrl) {
-          openUrl(result.checkoutUrl);
+          // Calculate total before clearing cart
           const total = cartItems.reduce((sum, item) => sum + (parseFloat(item.price) * item.quantity), 0);
+          
+          // Clear the cart immediately after successful checkout
+          await handleClearCart();
+          
+          openUrl(result.checkoutUrl);
+          
           setPurchaseDetails({ total });
           setShowConfirmation(true);
           setTimeout(() => setShowConfirmation(false), 5000);
@@ -300,9 +311,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
       
       const checkoutUrl = cartDetails.cart.checkoutUrl;
+      
+      // Calculate total before clearing cart
+      const total = cartItems.reduce((sum, item) => sum + (parseFloat(item.price) * item.quantity), 0);
+      
+      // Clear the cart immediately after successful checkout
+      await handleClearCart();
+      
       openUrl(checkoutUrl);
       
-      const total = cartItems.reduce((sum, item) => sum + (parseFloat(item.price) * item.quantity), 0);
       setPurchaseDetails({ total });
       setShowConfirmation(true);
       setTimeout(() => setShowConfirmation(false), 5000);
@@ -312,7 +329,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       alert(`Checkout Failed: ${errorMessage}\\n\\nCheck console for details and try again.`);
     }
-  }, [cartItems, openUrl]);
+  }, [cartItems, openUrl, handleClearCart]);
 
   return (
     <CartContext.Provider value={{
