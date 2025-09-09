@@ -18,7 +18,6 @@ Your app now has complete Shopify purchase functionality:
 ### ✅ **Server Actions**
 - **initiateCheckout()**: Creates Shopify cart and gets checkout URL
 - **completePurchase()**: Handles post-purchase cleanup
-- **getOrderDetails()**: Fetches order info via Admin API
 
 ---
 

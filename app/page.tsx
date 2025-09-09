@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Button } from "./components/DemoComponents";
 import { ProductGrid } from "./components/ShopifyComponents";
 import { Banner, ProductBanner } from "./components/Banner";
-import { OrderTracker } from "./components/OrderTracker";
 import { useCart } from "./components/CartProvider";
 import { useOpenUrl } from "@coinbase/onchainkit/minikit";
 
@@ -48,16 +47,6 @@ export default function App() {
                 {cartItemCount}
               </span>
             )}
-          </button>
-          <button
-            onClick={() => setActiveTab("track")}
-            className={`flex-1 px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
-              activeTab === "track"
-                ? "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md transform scale-105"
-                : "text-[var(--app-foreground-muted)] hover:text-emerald-700 hover:bg-emerald-50"
-            }`}
-          >
-            📦 Track
           </button>
         </nav>
 
@@ -104,18 +93,6 @@ export default function App() {
                   {cartItems.length === 0 ? '💪 Start Shopping' : '💪 View Cart'}
                 </Button>
               </div>
-            </div>
-          )}
-          
-          {activeTab === "track" && (
-            <div className="space-y-4 animate-fade-in">
-              <div className="text-center mb-4">
-                <h2 className="text-xl text-[var(--app-foreground)] font-[var(--font-heading-family)]">
-                  Track Your Order
-                </h2>
-              </div>
-              
-              <OrderTracker />
             </div>
           )}
         </main>

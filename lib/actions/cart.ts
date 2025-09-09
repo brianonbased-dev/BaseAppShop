@@ -3,18 +3,6 @@
 import { shopifyFetch, CART_CREATE_MUTATION, CART_LINES_ADD_MUTATION, CART_LINES_REMOVE_MUTATION, CART_LINES_UPDATE_MUTATION, CART_QUERY } from '@/lib/shopify-fixed';
 import { cookies } from 'next/headers';
 
-// Shopify Admin API Order types
-export interface ShopifyLineItem {
-  id: number;
-  title: string;
-  quantity: number;
-  price: string;
-  variant_title: string | null;
-  vendor: string;
-  product_id: number;
-  variant_id: number;
-}
-
 // Cart line item from Shopify Storefront API (legacy - use ShopifyCartLine instead)
 export interface ShopifyCartLineNode {
   merchandise: {
@@ -37,45 +25,7 @@ export interface ShopifyCartLineNode {
   quantity: number;
 }
 
-export interface ShopifyAddress {
-  first_name: string | null;
-  last_name: string | null;
-  address1: string | null;
-  address2: string | null;
-  city: string | null;
-  province: string | null;
-  country: string | null;
-  zip: string | null;
-  phone: string | null;
-}
 
-export interface ShopifyCustomer {
-  id: number;
-  email: string;
-  first_name: string | null;
-  last_name: string | null;
-  phone: string | null;
-}
-
-export interface ShopifyOrder {
-  id: number;
-  order_number: string;
-  email: string;
-  total_price: string;
-  currency: string;
-  financial_status: 'pending' | 'authorized' | 'partially_paid' | 'paid' | 'partially_refunded' | 'refunded' | 'voided';
-  fulfillment_status: 'fulfilled' | 'partial' | 'restocked' | null;
-  created_at: string;
-  updated_at: string;
-  customer: ShopifyCustomer | null;
-  line_items: ShopifyLineItem[];
-  shipping_address: ShopifyAddress | null;
-  billing_address: ShopifyAddress | null;
-  cancel_reason: string | null;
-  cancelled_at: string | null;
-  note: string | null;
-  tags: string;
-}
 
 // Proper cart structure from Shopify API
 export interface ShopifyCartLine {
@@ -532,38 +482,4 @@ export async function loadExistingCart(): Promise<{ success: boolean; items?: Ar
   }
 }
 
-// Get order details from Shopify Admin API (requires admin token)
-export async function getOrderDetails(orderId: string): Promise<{ success: boolean; order?: ShopifyOrder; error?: string }> {
-  try {
-    const adminToken = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
-    const shopDomain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN;
-    
-    if (!adminToken) {
-      console.log('⚠️ Admin token not configured, cannot fetch order details');
-      return { success: false, error: 'Admin API not configured' };
-    }
-    
-    const response = await fetch(`https://${shopDomain}/admin/api/2024-10/orders/${orderId}.json`, {
-      headers: {
-        'X-Shopify-Access-Token': adminToken,
-        'Content-Type': 'application/json'
-      }
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Failed to fetch order: ${response.statusText}`);
-    }
-    
-    const data = await response.json();
-    console.log('📋 Order details fetched:', data.order?.order_number);
-    
-    return { success: true, order: data.order };
-    
-  } catch (error) {
-    console.error('❌ Error fetching order details:', error);
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Failed to fetch order'
-    };
-  }
-}
+
