@@ -24,7 +24,7 @@ export function createShopifyClient() {
   
   return createStorefrontApiClient({
     storeDomain: `https://${domain}`,
-    accessToken: token,
+    publicAccessToken: token,
     apiVersion: '2024-10',
   });
 }

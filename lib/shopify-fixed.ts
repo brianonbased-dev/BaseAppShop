@@ -24,7 +24,7 @@ function getStorefrontClient() {
   // Create and cache the client
   _storefrontClient = createStorefrontApiClient({
     storeDomain: `https://${SHOPIFY_DOMAIN}`,
-    accessToken: SHOPIFY_TOKEN,
+    publicAccessToken: SHOPIFY_TOKEN,
     apiVersion: '2024-10',
   });
   return _storefrontClient;
@@ -32,14 +32,6 @@ function getStorefrontClient() {
 
 // Export the getter function instead of the client directly
 export { getStorefrontClient };
-
-// For backward compatibility, export a client that gets created lazily
-export const storefrontClient = new Proxy({}, {
-  get(target, prop) {
-    const client = getStorefrontClient();
-    return client[prop];
-  }
-});
 
 // Alternative: Direct fetch function for more control
 export async function shopifyFetch(query: string, variables?: Record<string, unknown>) {

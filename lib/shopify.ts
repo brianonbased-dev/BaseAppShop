@@ -22,7 +22,7 @@ console.log('🔧 Using direct Shopify values:', {
 // Simple direct client
 export const storefrontClient = createStorefrontApiClient({
   storeDomain: `https://${SHOPIFY_DOMAIN}`,
-  accessToken: SHOPIFY_TOKEN,
+  publicAccessToken: SHOPIFY_TOKEN,
   apiVersion: '2024-10',
 });
 

@@ -96,13 +96,13 @@ export function OrderTracker() {
     }
   };
 
-  const getStatusIcon = (status: string): string => {
+  const getStatusIcon = (status: string): "search" | "heart" | "star" | "check" | "plus" | "arrow-right" | "shopping-cart" | "shopping-bag" | "minus" | "x" => {
     switch (status) {
       case 'paid': return 'check';
-      case 'fulfilled': return 'truck';
-      case 'pending': return 'clock';
+      case 'fulfilled': return 'shopping-bag';
+      case 'pending': return 'star';
       case 'cancelled': return 'x';
-      default: return 'help-circle';
+      default: return 'search';
     }
   };
 
@@ -228,7 +228,7 @@ export function OrderTracker() {
 
       {status === 'error' && (
         <div className="text-center space-y-4">
-          <Icon name="alert-circle" size="lg" className="text-red-500 mx-auto" />
+          <Icon name="x" size="lg" className="text-red-500 mx-auto" />
           <div>
             <p className="text-red-900 font-medium">Tracking Error</p>
             <p className="text-red-600 text-sm">{error}</p>
@@ -255,15 +255,15 @@ export function OrderStatus({ status, className = "" }: OrderStatusProps) {
   const getStatusConfig = (status: string) => {
     switch (status?.toLowerCase()) {
       case 'paid':
-        return { icon: 'check', label: 'Paid', color: 'emerald' };
+        return { icon: 'check' as const, label: 'Paid', color: 'emerald' };
       case 'fulfilled':
-        return { icon: 'truck', label: 'Shipped', color: 'blue' };
+        return { icon: 'shopping-bag' as const, label: 'Shipped', color: 'blue' };
       case 'pending':
-        return { icon: 'clock', label: 'Pending', color: 'yellow' };
+        return { icon: 'star' as const, label: 'Pending', color: 'yellow' };
       case 'cancelled':
-        return { icon: 'x', label: 'Cancelled', color: 'red' };
+        return { icon: 'x' as const, label: 'Cancelled', color: 'red' };
       default:
-        return { icon: 'help-circle', label: status || 'Unknown', color: 'gray' };
+        return { icon: 'search' as const, label: status || 'Unknown', color: 'gray' };
     }
   };
 
